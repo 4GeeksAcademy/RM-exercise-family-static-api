@@ -9,26 +9,42 @@ update this file to implement the following already declared methods:
 from random import randint
 
 class FamilyStructure:
-    def __init__(self, last_name):
+    def __init__(self, last_name): #__init__: Es el constructor de la clase. Se ejecuta cuando se crea una nueva instancia de FamilyStructure.
         self.last_name = last_name
+        self._next_id = 1
+        self._members = [
+                        
+                        {'id':1, 'first_name':'Jhon','age':33,'lucky_numbers':[7,13,22]},
+                        {'id':2,'first_name':'Jane','age':35,'lucky_numbers':[10,14,3]},
+                        {'id':3,'first_name':'Jimmy','age':5,'lucky_numbers':[1]},
+        ]
 
-        # example list of members
-        self._members = []
+     # Este método genera un 'id' único al agregar miembros a la lista (no debes modificar esta función)
+    def _generate_id(self):
+        generated_id = self._next_id
+        self._next_id += 1
+        return generated_id
 
-    # read-only: Use this method to generate random members ID's when adding members into the list
-    def _generateId(self):
-        return randint(0, 99999999)
-
-    def add_member(self, member):
-        # fill this method and update the return
+    def add_member(self, member): ##member es el nuevo miembro que se desea agregar a la familia
+        ## Debes implementar este método
+        member['id'] = self._generateId()  # Genera un ID único
+        self._members.append(member)  ## Agrega un nuevo miembro a la lista de _members
         pass
 
     def delete_member(self, id):
-        # fill this method and update the return
+        ## Debes implementar este método
+        ## Recorre la lista y elimina el miembro con el id proporcionado
+        new_members=[]
+        for member in self._members:
+            if member['id'] !=id:
+                new_members.append(member)
+        self._members=new_members
         pass
 
     def get_member(self, id):
-        # fill this method and update the return
+        ## Debes implementar este método
+        ## Recorre la lista y elimina el miembro con el id proporcionado
+
         pass
 
     # this method is done, it returns a list with all the family members

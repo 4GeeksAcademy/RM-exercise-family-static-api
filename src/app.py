@@ -24,19 +24,55 @@ def handle_invalid_usage(error):
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
+#endpoints
+#Obtén todos los miembros de la familia:
+@app.route('/members', methods=['GET']) #se establece la ruta URL '/members' que acepta solicitudes GET(para obtener datos)
 
-@app.route('/members', methods=['GET'])
-def handle_hello():
+def get_members():
+    members =jackson_family.get_all_members()# se llama al metodo get all members para obtener los miembros de la familia y se almacena en members
+    return jsonify(members),200 #jsonify (members)convierte la lista de miembros en un formato JSON; 200 es un codigo de estado HTTP que indica que la solicitud fue exitosa.
+# def handle_hello():
+#     # this is how you can use the Family datastructure by calling its methods
+#     members = jackson_family.get_all_members()
+#     response_body = {
+#         "hello": "world",
+#         "family": members
+#     }
+#     return jsonify(response_body), 200
 
-    # this is how you can use the Family datastructure by calling its methods
+#Devuelve el miembro de la familia para el cual id == member_id.
+@app.route('/member/<int:member_id>', methods=['GET'])
+def get_member(member_id):
+    member=jackson_family.get_member(member_id)
+    if member:
+        return jsonify(member),200
+    else:
+        return jsonify({"mensaje": "Miembro no encontrado"}),404
+
+#Añadir (POST) un miembro
+@app.route('/member', methods=['POST'])#¿ESTA BIEN QUE EN UNA SOLA RUTA PONGAMOS GET ALL MEMBERS, CON ADD NEW MEBERS?
+def add_new_member():
+    # se almacenan y se obtienen los datos de body 
+    new_member=request.json
+    # Validamos que los datos requeridos están presentes
+    if not new_member or 'first_name' not in new_member or 'age' not in new_member or 'lucky_numbers' not in new_member:
+        return jsonify({"message": "Faltan datos requeridos"}), 400
+
+    # Agregamos el nuevo miembro utilizando el método add_member
+    jackson_family.add_member(new_member)
+
+    # Devolvemos la lista actualizada de miembros
     members = jackson_family.get_all_members()
-    response_body = {
-        "hello": "world",
-        "family": members
-    }
+    return jsonify(members), 200
 
+    # jackson_family.add_member(new_member)
+    # return jsonify(new_member),200
 
-    return jsonify(response_body), 200
+#ELIMINA un miembro
+@app.route('/member/<int:member_id>', methods=['DELETE'])
+def delete_member(member_id):
+    jackson_family.delete_member(member_id) #Elimina al miembro con el ID dado
+    return jsonify({"Miembro eliminado con id": member_id}),200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
