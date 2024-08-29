@@ -54,13 +54,8 @@ def get_member(member_id):
 def add_new_member():
     # se almacenan y se obtienen los datos de body 
     new_member=request.json
-    # Validamos que los datos requeridos están presentes
-    if not new_member or 'first_name' not in new_member or 'age' not in new_member or 'lucky_numbers' not in new_member:
-        return jsonify({"message": "Faltan datos requeridos"}), 400
-
     # Agregamos el nuevo miembro utilizando el método add_member
     jackson_family.add_member(new_member)
-
     # Devolvemos la lista actualizada de miembros
     members = jackson_family.get_all_members()
     return jsonify(members), 200
@@ -71,8 +66,11 @@ def add_new_member():
 #ELIMINA un miembro
 @app.route('/member/<int:member_id>', methods=['DELETE'])
 def delete_member(member_id):
-    jackson_family.delete_member(member_id) #Elimina al miembro con el ID dado
-    return jsonify({"Miembro eliminado con id": member_id}),200
+    response=jackson_family.delete_member(member_id) #Elimina al miembro con el ID dado
+    print(response)
+    if response["done"]:
+        return jsonify(response),200
+    return jsonify(response),400
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
