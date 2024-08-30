@@ -19,9 +19,13 @@ class FamilyStructure:
                         {'id':3,'first_name':'Jimmy','age':5,'lucky_numbers':[1], },
         ]
 
-     # Este método genera un 'id' único al agregar miembros a la lista (no debes modificar esta función)
+    # Este método genera un 'id' único al agregar miembros a la lista (no debes modificar esta función)
+    # def _generate_id(self):
+    #     return randint(0, 99999999)
     def _generate_id(self):
-        return randint(0, 99999999)
+        generated_id = self._next_id
+        self._next_id += 1
+        return generated_id
 
     def add_member(self, member): ##member es el nuevo miembro que se desea agregar a la familia
         ## Debes implementar este método
